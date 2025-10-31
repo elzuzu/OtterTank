@@ -5,7 +5,7 @@ kind: epic
 status: todo
 owners:
   - engineering
-summary: "Implémenter le contrôle du tank, la gestion Fuel/Heat/Ammo, le HUD associé et les interactions terrain." 
+summary: "Implémenter le contrôle du tank centré KBM, la gestion Fuel/Heat/Ammo, le HUD associé et les interactions terrain."
 dependencies:
   - E1
 critical_path: true
@@ -18,6 +18,7 @@ Tu dois produire un tank jouable avec trois jauges (Fuel, Heat, Ammo) qui réagi
 
 ## Préparation commune
 - Assure-toi d'avoir terminé E1 (tests gdUnit4 verts, pipeline CI OK).
+- Valide T1 — KBM Gold Standard : souris raw sans smoothing, turret-first aiming, dash buffer configuré. Garde la doc ouverte pour vérifier chaque paramètre.
 - Télécharge les assets placeholder gratuits :
   - Sprite du tank : <https://kenney.nl/assets/topdown-tanks-redux> → utilise `tankBody_darkOutline.png`.
   - Tileset : <https://kenney.nl/assets/topdown-shooter> → `tile_Grass.png`, `tile_Mud.png`, `tile_Metal.png`.
@@ -30,12 +31,12 @@ Tu dois produire un tank jouable avec trois jauges (Fuel, Heat, Ammo) qui réagi
 ## Sprint 1 — TankController & Physique basique
 
 ### Résultat attendu
-Un tank (châssis + tourelle) contrôlable en twin-stick, avec déplacement, rotation et tir de projectiles dummy.
+Un tank (châssis + tourelle) piloté exclusivement clavier/souris : déplacement `ZQSD/WASD`, tir principal à la souris gauche, dash sur `Shift`, tourelle qui suit le curseur écran (sans smoothing) et se verrouille quand `lock_turret` est maintenu.
 
 ### Checklist chronologique
 1. **Créer la scène Tank**
    - `res://scenes/core/Tank.tscn` :
-     - `KinematicBody2D` (ou `CharacterBody2D` Godot 4) nommé `Tank`.
+     - `CharacterBody2D` nommé `Tank`.
      - Enfant `Sprite2D` (texture `tankBody_darkOutline.png`).
      - Enfant `Node2D` `Turret` avec `Sprite2D` (utilise `tankBarrel_dark.png`).
    - Script `res://scripts/core/Tank.gd` :
@@ -43,32 +44,58 @@ Un tank (châssis + tourelle) contrôlable en twin-stick, avec déplacement, rot
      extends CharacterBody2D
 
      @export var move_speed: float = 220.0
-     @export var rotation_speed: float = 3.0
-     @export var turret_rotation_speed: float = 5.0
+     @export var dash_speed: float = 480.0
+     @export var dash_buffer_ms: float = 100.0
+     @export var turret_rotation_speed_deg: float = 720.0
      @export var projectile_scene: PackedScene = preload("res://scenes/core/Projectile.tscn")
 
+     var _cursor_screen: Vector2
+     var _dash_buffer: float = -1.0
      var aim_vector: Vector2 = Vector2.RIGHT
 
-     func _physics_process(_delta: float) -> void:
-         var input_vector := Vector2.ZERO
-         input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-         input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
-         velocity = input_vector.normalized() * move_speed
+     func _ready() -> void:
+         _cursor_screen = get_viewport().get_mouse_position()
+         Input.set_use_accumulated_input(false)
+         set_process_unhandled_input(true)
+
+     func _unhandled_input(event: InputEvent) -> void:
+         if event is InputEventMouseMotion:
+             _cursor_screen = event.position
+         elif event.is_action_pressed("dash"):
+             _dash_buffer = dash_buffer_ms / 1000.0
+         elif event.is_action_pressed("fire_primary"):
+             try_fire()
+
+     func _physics_process(delta: float) -> void:
+         var move_input := Vector2(
+             Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
+             Input.get_action_strength("move_backward") - Input.get_action_strength("move_forward")
+         )
+         var desired_velocity := move_input.normalized() * move_speed
+
+         if _dash_buffer >= 0.0:
+             _dash_buffer -= delta
+             if _dash_buffer >= 0.0 and move_input.length_squared() > 0.0:
+                 desired_velocity = move_input.normalized() * dash_speed
+                 _dash_buffer = -1.0
+
+         velocity = desired_velocity
          move_and_slide()
 
-     func update_aim_from_input(delta: float) -> void:
-         var aim_x := Input.get_action_strength("aim_right") - Input.get_action_strength("aim_left")
-         var aim_y := Input.get_action_strength("aim_down") - Input.get_action_strength("aim_up")
-         var new_aim := Vector2(aim_x, aim_y)
-         if new_aim.length() > 0.1:
-             aim_vector = new_aim.normalized()
-             var target_angle := aim_vector.angle()
-             $Turret.rotation = lerp_angle($Turret.rotation, target_angle, turret_rotation_speed * delta)
+         if not Input.is_action_pressed("lock_turret"):
+             var camera := get_viewport().get_camera_2d()
+             var target_world := camera.screen_to_world(_cursor_screen) if camera else get_global_mouse_position()
+             var aim_delta := (target_world - $Turret.global_position)
+             if aim_delta.length_squared() > 0.0001:
+                 aim_vector = aim_delta.normalized()
+                 var target_angle := aim_vector.angle()
+                 var lerp_weight := clamp(turret_rotation_speed_deg * delta, 0.0, 1.0)
+                 $Turret.rotation = lerp_angle($Turret.rotation, target_angle, lerp_weight)
 
      func try_fire() -> void:
-         if Input.is_action_just_pressed("shoot"):
+         if Input.is_action_just_pressed("fire_primary"):
              var projectile := projectile_scene.instantiate()
-             projectile.global_position = $Turret.global_position + aim_vector * 32
+             projectile.global_position = $Turret.global_position + aim_vector * 32.0
              projectile.rotation = aim_vector.angle()
              get_tree().current_scene.add_child(projectile)
              EventBus.emit_event("PROJECTILE_FIRED", {"position": projectile.global_position})
@@ -92,17 +119,20 @@ Un tank (châssis + tourelle) contrôlable en twin-stick, avec déplacement, rot
      ```
 3. **Intégrer le tank dans `Game.tscn`**
    - Instancie `Tank.tscn` sous `Game`.
-   - Dans `Game.gd`, connecte le signal `tick_started` pour appeler `tank.update_aim_from_input(delta)` et `tank.try_fire()`.
-4. **Configurer InputMap** (ajoute les actions si manquantes) : `aim_left/right/up/down` pour manette, `mouse_motion` (Sprint 2).
+   - Dans `Game.gd`, expose `@onready var tank := $Tank` et assure-toi que `CameraRig` suit ce nœud.
+   - Ajoute une fonction `_unhandled_input(event)` dans `Game.gd` qui appelle `tank._unhandled_input(event)` pour propager les événements souris/clavier au tank si nécessaire.
+4. **Vérifier l'InputMap** : toutes les actions clavier/souris définies dans E1 doivent exister (`move_forward/backward`, `fire_primary`, `fire_secondary`, `dash`, `lock_turret`, `cycle_ammo_*`, etc.). Si une action manque, ajoute-la et documente le binding dans le journal de sprint.
 
 ### Tests & validations
 - Dans l'éditeur, appuie sur `F5` : le tank se déplace sur un fond gris.
-- Les projectiles sortent dans la direction de la tourelle.
+- Les projectiles sortent dans la direction de la tourelle, alignés avec le curseur.
 - `Telemetry.increment("projectiles")` est appelé dans `try_fire()` (ajoute l'appel).
-- Ajoute une vidéo GIF (5 s) montrant le tank qui tire (peut être un enregistrement OBS) dans le dossier `docs/previews/sprint1.gif`.
+- Maintenir `lock_turret` empêche la tourelle de tourner même si la souris bouge.
+- Ajoute une vidéo GIF (5 s) montrant un dash + un flick shot dans `docs/previews/sprint1.gif`.
 
 ### Critères d'acceptation
-- `Tank.gd` n'utilise pas de `Input.is_action_pressed` directement dans `_process` pour le tir (uniquement `try_fire`).
+- `Tank.gd` lit les mouvements de souris dans `_unhandled_input` ou `_input` (pas de polling dans `_process`).
+- `Tank.gd` n'utilise pas `Input.get_vector` ou `Input.is_action_pressed` pour simuler une manette (pas d'axes virtuels). Les valeurs proviennent d'actions clavier.
 - Tous les nœuds sont nommés comme indiqué (`Tank`, `Turret`).
 
 ## Sprint 2 — Jauges Fuel/Heat/Ammo + HUD
@@ -287,5 +317,5 @@ Des événements de ravitaillement apparaissent, permettant de recharger Fuel/Am
 
 ## Risques & mitigations
 - **Balance injuste** : stocke les constantes dans `GameConfig` pour centraliser.
-- **Entrées manette** : teste avec `godot --path ./game --run --display-driver headless` + `--input` (Godot CLI) si pas de manette.
+- **Latence/perte de raw input** : vérifie dans le profiler que `Input.set_use_accumulated_input(false)` est bien appelé et que le framerate reste stable (>60 FPS p95) pendant les dashs.
 - **Assets manquants** : si un lien Kenney est cassé, télécharge depuis la copie GitHub officielle `https://github.com/kenneyNL/TopdownTanksRedux`.

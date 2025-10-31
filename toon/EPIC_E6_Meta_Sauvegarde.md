@@ -21,6 +21,7 @@ critical_path: true
 Tu dois créer la méta qui motive les reruns : sauvegarde chiffrée, tech tree, atlas de campagne persistant et analytics de run. Chaque section contient des scripts à copier-coller.
 
 ## Préparation commune
+- Vérifie `T1 — KBM Gold Standard` : toutes les options sauvegardées doivent inclure les réglages KBM (sensibilité, inversion, indicateurs) sans introduire de presets manette implicites.
 - Ajouter le plugin officiel Godot `godot-encrypt` (copie le dossier dans `game/addons/godot-encrypt/`).
 - Créer `docs/meta/tech_tree.xlsx` (modèle tableur) avec colonnes `NodeID`, `Prerequisites`, `Cost`, `Effect`.
 - Ajouter un dossier `saves/` à la racine git (gitignored) pour les tests.

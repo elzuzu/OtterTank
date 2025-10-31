@@ -4,6 +4,8 @@ Ce répertoire contient les tickets TOON pour piloter la réalisation complète 
 
 ## Structure (lis la colonne "Tu dois" avant de commencer)
 
+> 🎯 **Contrôles** : commence toujours par `T1 — KBM Gold Standard (P0)` avant tout autre ticket. Le support manette (`T9 — Manette & Steam Deck`) reste optionnel tant que le KBM n'est pas validé.
+
 | Fichier | Tu dois | Notes |
 | --- | --- | --- |
 | `EPIC_E1_Core_Framework.md` | Suivre à la lettre l'installation Godot, scripts shell, CI. | Commence toujours par vérifier `which godot`. |

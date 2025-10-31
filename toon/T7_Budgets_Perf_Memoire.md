@@ -13,6 +13,7 @@ risks:
   - Budgets irréalistes vs matériel cible
   - Surprofiling qui ralentit la prod
   - Oubli de mettre à jour les limites après optimisation
+  - Optimisations qui compromettent le feel KBM (accélération implicite, smoothing)
 ---
 
 # T7 — Budgets performance & mémoire
@@ -21,6 +22,7 @@ risks:
 Définir et automatiser les budgets CPU, GPU, VRAM et densité d'entités pour garantir 60 fps sur machine médiane et éviter les dérives de contenu.
 
 ## Pré-requis exacts
+- Importer les budgets frame pacing de T1 — KBM Gold Standard (p95 ≤16.6 ms) comme contraintes incontournables.
 - Matériel cible défini (CPU Ryzen 5 3600, GPU GTX 1060, 16 Go RAM).
 - Accès à `Godot Performance Profiler` et `pixi` pour profiling batch.
 - Connaître la taille moyenne des assets actuels.

@@ -13,6 +13,7 @@ risks:
   - Collecte accidentelle de données personnelles
   - Refus de consentement bloquant les statistiques essentielles
   - Incohérence entre doc légale et implémentation
+  - Perte de métriques KBM rendant impossible la détection de régressions input
 ---
 
 # T6 — Télémétrie respectueuse & conformité RGPD
@@ -21,6 +22,7 @@ risks:
 Mettre en place une télémétrie opt-in, anonymisée et documentée pour suivre les métriques de gameplay clés tout en respectant strictement la réglementation RGPD (Europe/Zurich).
 
 ## Pré-requis exacts
+- Cartographier les événements liés aux inputs KBM (latence, flick test) définis dans T1 pour assurer leur suivi RGPD.
 - Consultation juridique confirmant la liste de métriques autorisées.
 - Stockage télémetrie défini (BigQuery ou fichiers locaux anonymisés).
 - Préparer `PRIVACY.md` modèle validé.

@@ -12,6 +12,7 @@ risks:
   - Corruption silencieuse lors d'une migration partielle
   - Explosion de la taille disque à cause des backups
   - Perte de compatibilité rétroactive au-delà de deux versions
+  - Paramètres KBM non migrés qui forcent un retour aux presets manette
 ---
 
 # T4 — Versioning & migration des sauvegardes
@@ -20,6 +21,7 @@ risks:
 Sécuriser l'évolution des sauvegardes en introduisant un champ de version, des migrateurs incrémentaux testés, des backups atomiques et un plan de réparation utilisateur pour éviter la perte de progression.
 
 ## Pré-requis exacts
+- Exporter la configuration des contrôles KBM (T1) pour garantir la migration des options input sans régression.
 - Définir les formats de sauvegarde actuels (`meta`, `run`, `profile`).
 - Choisir un format de checksum (SHA256) et bibliothèque (Godot `Crypto`).
 - Budget disque pour les backups (≥3× taille moyenne de save).

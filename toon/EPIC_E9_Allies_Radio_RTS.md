@@ -24,6 +24,7 @@ critical_path: false
 Même si cet epic n'est pas sur le chemin critique, il doit être traité avec la même rigueur : tu ajoutes des alliés commandés via radio, leur IA simple et la ligne de front dynamique.
 
 ## Préparation commune
+- Vérifie `T1 — KBM Gold Standard` : les ordres radio ne doivent pas forcer des patterns de mouvement ou de visée incompatibles avec le preset clavier/souris (ex. pas de snap automatique).
 - Rédige `docs/allies/order_voice_lines.txt` (liste des répliques radio, FR + EN).
 - Télécharge SFX radio (freesound `RadioSquawk.wav`) et place dans `game/audio/radio/`.
 - Ajoute un autoload `scripts/allies/AlliesBus.gd` (copie-colle gabarit plus bas).

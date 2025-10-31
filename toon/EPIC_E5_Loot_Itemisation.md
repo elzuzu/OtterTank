@@ -20,6 +20,7 @@ critical_path: true
 Tu dois créer un système de loot inspiré d'ARPG mais simplifié, avec modules de tank modulaires, drop tables adaptatives et gestion d'inventaire Tetris. Suis les recettes mot pour mot.
 
 ## Préparation commune
+- Vérifie les contraintes d'équipement de T1 : aucun module ne doit introduire de visée assistée ou de smoothing implicite.
 - Ajoute `docs/data/loot_tables.csv` (colonnes : `DropTableID`, `ItemID`, `Weight`, `WorldTier`, `Notes`).
 - Télécharge les icônes Kenney `Loot Pack` pour les items (`game/assets/icons/`).
 - Active `Project Settings > AutoLoad > res://scripts/inventory/InventoryBus.gd` (sera créé dans Sprint 2).
