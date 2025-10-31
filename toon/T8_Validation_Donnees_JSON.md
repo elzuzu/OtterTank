@@ -12,6 +12,7 @@ risks:
   - Schéma trop strict bloquant les itérations
   - Incohérence entre schéma et runtime
   - Temps d'exécution trop long en CI
+  - Oubli de valider les configurations KBM provoquant une dérive vers la manette par défaut
 ---
 
 # T8 — Schémas JSON & linter des données
@@ -20,6 +21,7 @@ risks:
 Créer des schémas JSON et un outil de validation pour sécuriser les données items/affixes/chunks/loot tables et empêcher les régressions de contenu.
 
 ## Pré-requis exacts
+- Importer les schémas de données liés aux contrôles KBM (binding, options) pour empêcher toute régression côté T1.
 - Inventaire complet des fichiers JSON à valider.
 - Choisir `jsonschema` (Python) comme validator.
 - Définir conventions de nommage (snake_case, ids uniques).

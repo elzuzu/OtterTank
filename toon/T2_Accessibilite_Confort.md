@@ -13,6 +13,7 @@ risks:
   - Perte de lisibilité des effets lors de l'application de LUT
   - Sous-titres radio qui masquent le HUD critique
   - Paramètres non persistés entraînant des régressions UX
+  - Accessibilité qui désactive par erreur les réglages du KBM Gold Standard
 ---
 
 # T2 — Accessibilité & confort visuel
@@ -21,6 +22,7 @@ risks:
 Mettre en place les options d'accessibilité critiques (modes daltonisme, réduction des mouvements, sous-titres radio, HUD lisible) afin d'élargir l'audience et réduire la fatigue visuelle et le motion sickness.
 
 ## Pré-requis exacts
+- T1 — KBM Gold Standard (P0) validé et verrouillé (tous les toggles d'options doivent rester compatibles).
 - Liste d'effets visuels sensibles (flash, secousses, bloom).
 - Accessibilité guidelines WCAG 2.1 AA en référence.
 - Panneau QA interne avec 5 testeurs volontaires.

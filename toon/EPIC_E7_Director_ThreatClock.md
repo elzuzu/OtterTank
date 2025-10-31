@@ -22,6 +22,7 @@ critical_path: true
 Tu dois coder un Director dynamique comme dans Left4Dead mais pour OtterTank : il surveille le build, modifie les spawns, déclenche des contre-technos, et gère une horloge de menace. Chaque sprint détaille les scripts et tests.
 
 ## Préparation commune
+- Relis `T1 — KBM Gold Standard` : le Director ne doit jamais appliquer de handicaps modifiant la latence input ou la courbe souris, uniquement des menaces gameplay.
 - Lire la doc Valve "AI Director" (résumé dans `docs/director/ai_director_summary.md` que tu rédiges).
 - Créer `docs/director/metrics.xlsx` (colonnes : `Metric`, `Source`, `UpdateFrequency`, `Thresholds`).
 - Ajouter un autoload `scripts/director/DirectorBus.gd` (vide pour l'instant).

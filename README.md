@@ -24,11 +24,16 @@
 - **Build Diversity**: aucun top-5 build ne dépasse 45 % des victoires en endgame.
 - **Moments Épiques**: ≥1 événement “clipable” (frontline push, convoi sauvé, contre-tech) par run de 12 minutes.
 
+### Stratégie de contrôle
+- **P0 absolu** : clavier/souris optimisé (voir `toon/T1_KBM_Gold_Standard.md`). Toute feature de gameplay doit être testée et validée sur ce preset avant d'être envisagée ailleurs.
+- **P2 optionnel** : support manette/Steam Deck (voir `toon/T9_Manette_SteamDeck_P2.md`) ne débute qu'après validation du Gold Standard KBM.
+- **Règle de non-régression** : aucune tâche ne peut introduire de latence, smoothing ou aim assist implicite côté KBM sans revue dédiée.
+
 ---
 
 ## 2. Player Experience Breakdown
 
-1. **Combat Feel**: twin-stick tank avec inertie, tourelle indépendante, recul et camera shake maîtrisé. Heat/Fuel/Ammo rétroaction immédiate (SFX, HUD, UI states).
+1. **Combat Feel**: tank piloté clavier/souris prioritaire (KBM Gold Standard), inertie maîtrisée, tourelle indépendante guidée par le curseur et caméra mouse-led. Heat/Fuel/Ammo rétroaction immédiate (SFX, HUD, UI states). La manette reste un add-on P2 optionnel.
 2. **Loot Dopamine**: quatre raretés (Commun → Légendaire), affixes tri-ressource et alliés, sets et uniques “twist”, pity timer data-driven.
 3. **Procedural Mastery**: chunk library par biome, “vaults” artisanales, chemin critique garanti + poches optionnelles, seed loggable pour QA.
 4. **Adaptive Opposition**: contre-technos (boucliers anti-frag, mines EMP, brouilleurs) télémétrées; War Room offre des contre-mesures claires.
@@ -50,7 +55,7 @@ Nous utilisons **TOON** (`/toon/*.md`) pour orchestrer les epics. Chaque epic co
 7. **Sprint 7 — Endgame & Meta**: opérations, rifts, World Tiers, sauvegarde tech tree.
 8. **Sprint 8 — Polish & Release Candidate**: HUD final, audio/VFX, QA bots, exports CI.
 
-👉 Consulte `toon/README.md` et les fichiers `EPIC_E*.md` pour les user stories, commandes tests obligatoires et artefacts attendus.
+👉 Consulte `toon/README.md` et les fichiers `EPIC_E*.md` pour les user stories, commandes tests obligatoires et artefacts attendus. Les tickets TOON reflètent désormais le focus KBM (T1 — KBM Gold Standard) et un ticket P2 distinct pour la manette/Steam Deck.
 
 ---
 

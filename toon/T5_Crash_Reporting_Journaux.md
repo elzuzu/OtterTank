@@ -12,6 +12,7 @@ risks:
   - Envoi de données personnelles non souhaité
   - Crash handler qui dégrade les performances
   - Logs verbeux saturant le disque
+  - Absence de métriques KBM rendant les analyses de latence impossibles
 ---
 
 # T5 — Crash reporting & journaux corrélés
@@ -20,6 +21,7 @@ risks:
 Intégrer une solution de crash reporting (Sentry ou équivalent) avec logs corrélés aux seeds/builds afin de reproduire rapidement les incidents liés au procedural.
 
 ## Pré-requis exacts
+- Logger les métriques de latence input exposées par T1 pour surveiller les régressions KBM dans les rapports.
 - Créer un compte Sentry projet "OtterTank" (environnement dev/staging/prod).
 - Générer DSN et tokens stockés dans `.env` (non commité).
 - Ajouter `godot-sentry` au projet.

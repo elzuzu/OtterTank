@@ -18,6 +18,7 @@ critical_path: true
 Tu dois fabriquer une IA d'ennemis capable de poursuivre le tank, de subir des dégâts et de laisser une carcasse bloquante. On ne veut pas de comportement improvisé : chaque comportement est décrit ici.
 
 ## Préparation commune
+- Relis `T1 — KBM Gold Standard` : les patterns ennemis ne doivent pas introduire de tracking basé manette ou d'aim assist caché.
 - Vérifie que `Tank.tscn`, `ResourceManager` et `EventBus` fonctionnent (tests E2 OK).
 - Télécharge les sprites d'ennemis (Kenney Topdown Tanks Redux, `tankBody_darkLarge_outline.png` pour mini-boss, `tankBody_red_outline.png` pour grunt).
 - Ajoute `docs/reference/ai_flowchart.png` (schéma que tu dessines avec draw.io reprenant les états). Le fichier doit montrer : `Spawn → Seek → Attack → Die → Carcass`.

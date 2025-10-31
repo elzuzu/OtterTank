@@ -12,6 +12,7 @@ risks:
   - Chaîne non extraite provoquant une régression UX
   - Polices fallback manquantes pour CJK
   - Coupes de texte dans l'UI non détectées avant build
+  - Incohérence terminologique qui suggère la manette comme preset par défaut
 ---
 
 # T3 — Pipeline de localisation & i18n
@@ -20,6 +21,7 @@ risks:
 Mettre en place un pipeline complet d'extraction des chaînes, traduction FR/EN et fallback typographique pour préparer l'ouverture à d'autres langues sans régressions UI.
 
 ## Pré-requis exacts
+- S'assurer que les terminologies/strings contrôles reflètent T1 — KBM Gold Standard (P0) par défaut.
 - Installer `gettext` et `polib`.
 - Définir la charte linguistique FR/EN avec glossaire partagé.
 - Collecter les polices open-source avec support Latin + CJK (Noto Sans).

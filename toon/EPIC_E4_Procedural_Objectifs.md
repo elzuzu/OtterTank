@@ -19,6 +19,7 @@ critical_path: true
 Tu construis un générateur de niveau simple mais déterministe basé sur des chunks 64x64, puis tu implémentes quatre objectifs jouables. Chaque action est décrite mot pour mot, ne saute rien.
 
 ## Préparation commune
+- Vérifie dans `T1 — KBM Gold Standard` les contraintes caméra et HUD : les objectifs ne doivent jamais recentrer la caméra au détriment du curseur.
 - Installe l'outil `toon` (pour visualiser la roadmap) : `npm install -g @johannschopplich/toon` (vérifie `toon --version`).
 - Télécharge le pack `Kenney Modular 2D Blocks` pour obtenir divers chunks. Place-les dans `game/assets/chunks/`.
 - Crée un dossier `docs/procgen/` qui contiendra :

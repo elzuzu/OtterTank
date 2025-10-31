@@ -16,6 +16,7 @@ critical_path: true
 Tu dois **copier-coller** les étapes ci-dessous dans l'ordre. Ne saute jamais une case. Quand on te demande de créer un fichier, tu dois utiliser exactement le chemin et le contenu fournis. Si tu as un doute, recommence la commande.
 
 ## Prérequis exacts
+- Lire intégralement `toon/T1_KBM_Gold_Standard.md` et verrouiller la configuration KBM (souris raw, pas de smoothing) avant de lancer ce sprint. Toute modification d'InputMap ou de caméra doit respecter ces règles.
 - Installer **Godot 4.1.3 LTS** depuis <https://godotengine.org/download>. Vérifie la somme SHA256 fournie sur la page officielle (copie la valeur affichée, lance `shasum -a 256 Godot_v4.1.3-stable_linux.x86_64.zip` et compare).
 - Installer **Python 3.10** (nécessaire pour gdUnit4 CLI) et **Node.js 18** (pour TOON plus tard). Vérifie avec `python3 --version` et `node --version`.
 - Vérifier que `git` est configuré (`git config user.name`, `git config user.email`).
@@ -112,7 +113,7 @@ const MAX_ENEMIES: int = 300
 ## Sprint 2 — Boucle de jeu et scène principale
 
 ### Résultat attendu
-Scènes `Main.tscn`, `Game.tscn`, `CameraRig.tscn` et scripts associés générant une boucle fixe à 60 Hz, avec InputMap configurée pour clavier et manette.
+Scènes `Main.tscn`, `Game.tscn`, `CameraRig.tscn` et scripts associés générant une boucle fixe à 60 Hz, avec InputMap configurée strictement pour le preset clavier/souris.
 
 ### Checklist chronologique
 1. **Créer `Main.tscn`**
@@ -177,11 +178,16 @@ Scènes `Main.tscn`, `Game.tscn`, `CameraRig.tscn` et scripts associés généra
    - Ajoute un `Camera2D` enfant, `Current = On`, `Zoom = (1,1)`.
 4. **Configurer les autoloads**
    - Vérifie dans `Project Settings > AutoLoad` que `EventBus.gd`, `Telemetry.gd`, `GameConfig.gd` sont cochés.
-5. **Configurer l'InputMap** *(copie ces actions)*
-   - `Project > Project Settings > Input Map` → `+` → ajoute actions `move_up`, `move_down`, `move_left`, `move_right`, `shoot`, `dash`, `aim_up`, `aim_down`, `aim_left`, `aim_right`.
-   - Associe : `move_up` = `W` + `DPad Up`; `move_down` = `S` + `DPad Down`; `move_left` = `A` + `DPad Left`; `move_right` = `D` + `DPad Right`.
-   - `shoot` = `Space` + `Joypad Button 7 (Xbox RB)`; `dash` = `Left Shift` + `Joypad Button 0 (A)`.
-   - Pour `aim_*`, utilise `Joypad Motion` axes (X/Y).
+5. **Configurer l'InputMap** *(copie ces actions et rien d'autre pour le MVP)*
+   - `Project > Project Settings > Input Map` → `+` → ajoute actions : `move_forward`, `move_backward`, `move_left`, `move_right`, `fire_primary`, `fire_secondary`, `dash`, `lock_turret`, `salvage`, `inventory_quick`, `cycle_ammo_up`, `cycle_ammo_down`, `select_slot_1`, `select_slot_2`, `select_slot_3`, `select_slot_4`.
+   - Associe uniquement des entrées clavier/souris :
+     - `move_forward` = `W` (ajoute aussi `Z` pour clavier AZERTY), `move_backward` = `S`, `move_left` = `A` + `Q`, `move_right` = `D`.
+     - `fire_primary` = `Mouse Button Left`, `fire_secondary` = `Mouse Button Right`.
+     - `dash` = `Left Shift`, `lock_turret` = `Space` (maintenu).
+     - `salvage` = `F`, `inventory_quick` = `Tab`.
+     - `cycle_ammo_up` = `Mouse Wheel Up`, `cycle_ammo_down` = `Mouse Wheel Down`.
+     - `select_slot_1..4` = touches `1`, `2`, `3`, `4`.
+   - Ne crée **aucune** action manette dans ce sprint : le support Deck/manette est couvert plus tard par `T9` et ne doit pas polluer la base KBM.
 6. **Définir la scène principale**
    - `Project > Project Settings > Application > Run` → `Main Scene = res://scenes/core/Main.tscn`.
 

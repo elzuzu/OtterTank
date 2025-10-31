@@ -23,6 +23,7 @@ critical_path: true
 Tu dois créer les modes rejouables : Opérations à clé, Rifts à menace croissante et Warfront hebdo. Chaque sprint précise les données, scripts et tests.
 
 ## Préparation commune
+- Vérifie les contraintes KBM de `T1` : les modificateurs endgame ne doivent pas toucher aux contrôles (pas de brouillard réduisant le curseur ou de debuffs d'input).
 - Crée `docs/endgame/endgame_design.md` (résume objectifs, durées, récompenses).
 - Ajoute `game/data/world_tiers.json` avec base des niveaux (`tier`, `enemy_hp_multiplier`, `loot_ilvl_range`).
 - Prépare un dossier `docs/endgame/screenshots/` pour les captures.
